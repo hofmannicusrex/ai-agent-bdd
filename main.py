@@ -14,6 +14,7 @@ def main():
     parser = argparse.ArgumentParser(description="Chatbot")
     # Add one argument of type String.
     parser.add_argument("user_prompt", type=str, help="The prompt which the user would like to receive a response regarding.")
+    parser.add_argument("--verbose", action="store_true", help="Enables verbose output from the LLM.")
     args = parser.parse_args()
     # Now we can access `args.user_prompt`
 
@@ -23,24 +24,32 @@ def main():
         api_key=api_key,
     )
 
+    # List of messages to store the user's prompts.
+    messages = [
+        {"role": "user", "content": args.user_prompt}
+    ]
+
     # Response object. Add more details later.
     response = client.chat.completions.create(
         model="openrouter/free",
-        messages = [
-            {
-                "role": "user",
-                "content": args.user_prompt,
-            }
-        ]
+        # Pass the list of messages.
+        messages = messages
     )
 
     # Verify that the "usage" property is not None before trying to access its properties.
     if response.usage is None:
         raise RuntimeError("Error! The \"usage\" property was \"None\"... something most likely went wrong with the API request!")
 
+    if args.verbose:
+        print("Verbose output enabled!")
+        print("----------------")
+        print(f"User prompt: \"{args.user_prompt}\"")
+        print(f"Prompt tokens: {response.usage.prompt_tokens}")
+        print(f"Response tokens: {response.usage.completion_tokens}")
+        print("----------------")
     print(response.choices[0].message.content)
-    print(f"Prompt tokens: {response.usage.prompt_tokens}")
-    print(f"Response tokens: {response.usage.completion_tokens}")
+    # print(f"Prompt tokens: {response.usage.prompt_tokens}")
+    # print(f"Response tokens: {response.usage.completion_tokens}")
 
 
 if __name__ == "__main__":
