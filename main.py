@@ -48,8 +48,6 @@ def main():
         print(f"Response tokens: {response.usage.completion_tokens}")
         print("----------------")
     print(response.choices[0].message.content)
-    # print(f"Prompt tokens: {response.usage.prompt_tokens}")
-    # print(f"Response tokens: {response.usage.completion_tokens}")
 
 
 if __name__ == "__main__":
