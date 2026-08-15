@@ -1,28 +1,23 @@
-# /test_get_files_info.py
-
 from functions.get_file_content import get_file_content
 
-result = get_file_content("calculator", "lorem.txt")
-# print(f"lorem.txt length: {len(result)}")
-print(f"lorem.txt length: {result}")
-print(f"lorem.txt truncated: {'truncated' in result}")
 
-#################################################
-# # First round of tests.
-# print(get_files_info("calculator", "."))
-# print(get_files_info("calculator", "/bin"))
-# print(get_files_info("calculator", "../"))
-# print(get_files_info("calculator", "main.py"))
+def test() -> None:
+    result = get_file_content("calculator", "lorem.txt")
+    print(f"lorem.txt length: {len(result)}")
+    print(f"lorem.txt truncated: {'truncated' in result}")
 
-# # Second round of tests.
-# print("Result for current directory:")
-# print(get_files_info("calculator", "."))
+    result = get_file_content("calculator", "main.py")
+    print(result)
 
-# print("Result for 'pkg' directory:")
-# print(get_files_info("calculator", "pkg"))
+    result = get_file_content("calculator", "pkg/calculator.py")
+    print(result)
 
-# print("Result for '/bin' directory:")
-# print(get_files_info("calculator", "/bin"))
+    result = get_file_content("calculator", "/bin/cat")
+    print(result)
 
-# print("Result for '../' directory:")
-# print(get_files_info("calculator", "../"))
+    result = get_file_content("calculator", "pkg/does_not_exist.py")
+    print(result)
+
+
+if __name__ == "__main__":
+    test()
