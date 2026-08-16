@@ -25,6 +25,6 @@ def write_file(working_directory: str, file_path: str, content: str) -> str:
 
         return f"Successfully wrote to \"{file_path}\" ({len(content)} characters written)"
 
-        # Return any other errors as an "error string".
+    # Return any other errors as an "error string".
     except Exception as e:
         return f"Error writing to file \"{file_path}\": {e}"
