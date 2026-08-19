@@ -1,5 +1,27 @@
 import os
 
+# Function description to be used by the AI agent.
+schema_write_file = {
+    "type": "function",
+    "function": {
+        "name": "write_file",
+        "description": "Writes the specified content to a file at a specified file path relative to the working directory",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "The path of the file, relative to the working directory",
+                },
+                "content": {
+                    "type": "string",
+                    "description": "The content to write to the file",
+                },
+            "required": ["file_path", "content"]
+            },
+        },
+    },
+}
 
 def write_file(working_directory: str, file_path: str, content: str) -> str:
     try:
