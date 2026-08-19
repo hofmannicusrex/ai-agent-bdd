@@ -2,7 +2,6 @@
 
 from functions.get_files_info import get_files_info
 
-
 # First round of tests.
 # print(get_files_info("calculator", "."))
 # print(get_files_info("calculator", "/bin"))
@@ -21,3 +20,8 @@ print(get_files_info("calculator", "/bin"))
 
 print("Result for '../' directory:")
 print(get_files_info("calculator", "../"))
+
+# Third round of tests. Agent function-calling testing.
+# print("Result for '../' directory:")
+# print(get_files_info({'directory': '.'}))
+# print(get_files_info({'directory': 'pkg'}))

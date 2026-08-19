@@ -1,8 +1,33 @@
 import os
 import subprocess
-
 from subprocess import CompletedProcess
 
+# Function description to be used by the AI agent.
+schema_run_python_file = {
+    "type": "function",
+    "function": {
+        "name": "run_python_file",
+        "description": "Runs Python files that are located at a specified file path relative to the working directory. Optionally, arguments can be passed in as a list of strings.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "The path of the file, relative to the working directory",
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Any additional that need passed to the command. These arguments are specifed by the user",
+                    "items": {
+                        "type": "string",
+                        "description": "A single additional argument to be passed to the command"
+                    }
+                },
+            },
+            "required": ["file_path"]
+        },
+    },
+}
 
 def run_python_file(
     working_directory: str, file_path: str, args: list[str] | None = None

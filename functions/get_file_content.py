@@ -2,6 +2,25 @@ import os
 
 from config import MAX_CHARS
 
+# Function description to be used by the AI agent.
+schema_get_file_content = {
+    "type": "function",
+    "function": {
+        "name": "get_file_content",
+        "description": "Returns the contents of a file at a specified file path relative to the working directory",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "The path of the file, relative to the working directory",
+                },
+            },
+        "required": ["file_path"]
+        },
+    },
+}
+
 
 def get_file_content(working_directory: str, file_path: str) -> str:
     try:

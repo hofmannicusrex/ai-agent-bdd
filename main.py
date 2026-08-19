@@ -1,7 +1,14 @@
-import os
 import argparse
+import json
+import os
+
 from dotenv import load_dotenv
 from openai import OpenAI
+from openai.types.chat import ChatCompletion, ChatCompletionMessage
+
+from call_function import available_functions, call_function
+from prompts import system_prompt
+
 
 def main():
 
@@ -26,21 +33,43 @@ def main():
 
     # List of messages to store the user's prompts.
     messages = [
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": args.user_prompt}
     ]
 
     # Response object. Add more details later.
-    response = client.chat.completions.create(
+    response: ChatCompletion = client.chat.completions.create(
         model="openrouter/free",
         # Pass the list of messages.
-        messages = messages
+        messages = messages,
+        tools=available_functions,
+        temperature=0  # Set the "temperature" to "0" for more deterministic output.
     )
 
     # Verify that the "usage" property is not None before trying to access its properties.
     if response.usage is None:
         raise RuntimeError("Error! The \"usage\" property was \"None\"... something most likely went wrong with the API request!")
 
+    # Grab the message from the agent's response.
+    message: ChatCompletionMessage = response.choices[0].message
+
+    # If the message (ChatCompletionMessage) used any tool calls, inform the user.
+    for tool_call in message.tool_calls:
+        if tool_call.type != "function":
+            continue
+
+        # Store the result of the "tool call".
+        result_message = call_function(tool_call)
+
+        # If the function that was called does not return correctly(?) raise an exception.
+        if result_message["content"] is None:
+            raise RuntimeError(f"Empty function response for {tool_call.function.name}")
+
+        if args.verbose:
+            print(f"-> {result_message['content']}")
+
     if args.verbose:
+        print("\n----------------")
         print("Verbose output enabled!")
         print("----------------")
         print(f"User prompt: \"{args.user_prompt}\"")
